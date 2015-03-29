@@ -7,12 +7,13 @@ JRhythm is a simple and still incomplete implementation of an OpenGL based game 
 
 Features
 ==============================
-*LWJGL based
-*Uses the Slick library for 2D stuff like HUD etc.
-*Includes JBullet and sample vehicle scene
-*Texture loader
-*Wavefront OBJ import
-*Basic camera movement
+* LWJGL based
+* Uses the Slick library for 2D stuff like HUD etc.
+* Includes JBullet and sample vehicle scene
+* Texture loader
+* Stencil buffer shadows
+* Wavefront OBJ import
+* Basic camera movement
 
 Usage
 ==============================
