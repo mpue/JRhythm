@@ -1,0 +1,40 @@
+Ebene : Punkte nach Koordinatenform:
+
+3 Punkte in Gleichung einsetzen:
+
+Ax + By + Cz - D = 0
+
+LGS Lösen mit D=1
+
+oder:
+
+a) Die x-Koordinate des Normalenvektors ist a aus der Koordinatenform ax+by+cz=d
+b) Die y-Koordinate des Normalenvektors ist b aus der Koordinatenform ax+by+cz=d
+c) Die z-Koordinate des Normalenvektors ist c aus der Koordinatenform ax+by+cz=d
+d) Das d bestimmt sich aus dem Skalarprodukt von Normalenvektor und Ortsvektor
+
+Anders ausgedrückt: 
+
+Man kann ganz einfach die Koordinaten des Normalenvektors (n1/n2/n3) der Ebene in diese Form einsetzen ->
+
+n1x1 + n2x2 + n3x3 = d
+
+und dann einfach einen Punkt der Ebene für x1/x2/x3 einsetzen, das ergibt d und somit die Koordinatenform.
+
+z.B.
+
+Normalenvektor (0,1,0) // Ebene entlang der Z-Achse
+
+0 * x + 1 * y + 0 * z = d
+ 
+y = d;
+
+Punkt aus der Ebene (z.B. der Ursprung)
+
+(0,0,0)
+
+y = d = 0;
+
+somit 
+
+A = 0, B = 1, C = 0, D = 0

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="abstractScene" type="abstractScene"/>
+
+  <xs:element name="defaultScene" type="defaultScene"/>
+
+  <xs:complexType name="defaultScene">
+    <xs:complexContent>
+      <xs:extension base="abstractScene">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="abstractScene" abstract="true">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="rootNode" type="SceneNode" minOccurs="0"/>
+      <xs:element name="currentCameraIndex" type="xs:int"/>
+      <xs:element name="cameras" type="Camera" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="SceneNode" abstract="true">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="children" type="SceneNode" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="location" type="vector3F" minOccurs="0"/>
+      <xs:element name="xrot" type="xs:float"/>
+      <xs:element name="yrot" type="xs:float"/>
+      <xs:element name="zrot" type="xs:float"/>
+      <xs:element name="shaderProgramName" type="xs:string" minOccurs="0"/>
+      <xs:element name="textureLocation" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="vector3F">
+    <xs:complexContent>
+      <xs:extension base="vector">
+        <xs:sequence>
+          <xs:element name="x" type="xs:float"/>
+          <xs:element name="y" type="xs:float"/>
+          <xs:element name="z" type="xs:float"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vector" abstract="true">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="Box">
+    <xs:complexContent>
+      <xs:extension base="SceneNode">
+        <xs:sequence>
+          <xs:element name="color" type="vector3F" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Plane">
+    <xs:complexContent>
+      <xs:extension base="SceneNode">
+        <xs:sequence>
+          <xs:element name="color" type="vector3F" minOccurs="0"/>
+          <xs:element name="size" type="xs:float"/>
+          <xs:element name="textureScale" type="xs:float"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Light">
+    <xs:complexContent>
+      <xs:extension base="SceneNode">
+        <xs:sequence>
+          <xs:element name="index" type="xs:int"/>
+          <xs:element name="ambient" type="vector4F" minOccurs="0"/>
+          <xs:element name="diffuse" type="vector4F" minOccurs="0"/>
+          <xs:element name="specular" type="vector4F" minOccurs="0"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="vector4F">
+    <xs:complexContent>
+      <xs:extension base="vector">
+        <xs:sequence>
+          <xs:element name="x" type="xs:float"/>
+          <xs:element name="y" type="xs:float"/>
+          <xs:element name="z" type="xs:float"/>
+          <xs:element name="w" type="xs:float"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="Camera">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="0"/>
+      <xs:element name="position" type="vector3F" minOccurs="0"/>
+      <xs:element name="view" type="vector3F" minOccurs="0"/>
+      <xs:element name="upVector" type="vector3F" minOccurs="0"/>
+      <xs:element name="strafe" type="vector3F" minOccurs="0"/>
+      <xs:element name="mode" type="mode" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="mode">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="FLY"/>
+      <xs:enumeration value="FIRST_PERSON"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
+
