@@ -43,7 +43,7 @@ public class VBOUtils {
 
 		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureBufferID);
-		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 8, 0);
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);
 
 		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBufferID);
@@ -56,7 +56,37 @@ public class VBOUtils {
 		// GL11.glDrawArrays(GL11.GL_QUADS, 0, 24);
 		
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, indexBufferID);
-		GL12.glDrawRangeElements(mode, 0, maxIndex, indexBufferSize, GL11.GL_UNSIGNED_INT, 0);
+		GL12.glDrawRangeElements(mode, 0, maxIndex / 3, indexBufferSize, GL11.GL_UNSIGNED_INT, 0);
+		
+		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		
+	}
+	
+	public static void renderRange(int mode,int vertexBufferID,int textureBufferID, int normalBufferID, int colourBufferID, int indexBufferID, int start, int end, int count) {
+		
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, vertexBufferID);
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, 12, 0);
+
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, textureBufferID);
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, Float.BYTES * 2,0);
+
+		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, normalBufferID);
+		GL11.glNormalPointer(GL11.GL_FLOAT, 12,0);
+		
+		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, colourBufferID);
+		GL11.glColorPointer(3, GL11.GL_FLOAT, 12, 0);
+
+		// GL11.glDrawArrays(GL11.GL_QUADS, 0, 24);
+		
+		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ELEMENT_ARRAY_BUFFER_ARB, indexBufferID);
+		GL12.glDrawRangeElements(mode, start, end, count, GL11.GL_UNSIGNED_INT, 0);
 		
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);

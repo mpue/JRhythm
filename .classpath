@@ -3,11 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="lib" path="lib/AppleJavaExtensions.jar"/>
-	<classpathentry kind="lib" path="lib/jinput.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl_test.jar" sourcepath="lib/lwjgl-source-2.7.1.zip"/>
-	<classpathentry kind="lib" path="lib/lwjgl_util_applet.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl_util.jar" sourcepath="lib/lwjgl-source-2.7.1.zip"/>
-	<classpathentry kind="lib" path="lib/lwjgl-debug.jar" sourcepath="lib/lwjgl-source-2.7.1.zip"/>
 	<classpathentry kind="lib" path="lib/lzma.jar"/>
 	<classpathentry kind="lib" path="lib/vecmath.jar"/>
 	<classpathentry kind="lib" path="lib/stack-alloc.jar"/>
@@ -21,11 +16,17 @@
 	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
 	<classpathentry kind="lib" path="lib/jbullet.jar" sourcepath="C:/Users/mpue/Documents/workspaces/workspace/jbullet"/>
 	<classpathentry kind="lib" path="lib/forms-1.2.1.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/sunflow"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 8 [1.8.0_161]">
 		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="JRhythm/lib/native"/>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="supernova/lib/native"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/supernova/lib/jinput.jar"/>
+	<classpathentry kind="lib" path="/supernova/lib/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="/supernova/lib/lwjgl_test.jar"/>
+	<classpathentry kind="lib" path="/supernova/lib/lwjgl_util_applet.jar"/>
+	<classpathentry kind="lib" path="/supernova/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="/supernova/lib/lwjgl-debug.jar" sourcepath="/supernova/lib/lwjgl-source-2.7.1.zip"/>
+	<classpathentry kind="lib" path="/supernova/lib/lwjgl.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

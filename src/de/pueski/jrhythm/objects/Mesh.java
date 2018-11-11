@@ -1,6 +1,41 @@
 package de.pueski.jrhythm.objects;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_AMBIENT;
+import static org.lwjgl.opengl.GL11.GL_CCW;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
+import static org.lwjgl.opengl.GL11.GL_CW;
+import static org.lwjgl.opengl.GL11.GL_DIFFUSE;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING_BIT;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_LINE_BIT;
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
+import static org.lwjgl.opengl.GL11.GL_SHININESS;
+import static org.lwjgl.opengl.GL11.GL_SPECULAR;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_BIT;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glColor3f;
+import static org.lwjgl.opengl.GL11.glColor4f;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glFrontFace;
+import static org.lwjgl.opengl.GL11.glLineWidth;
+import static org.lwjgl.opengl.GL11.glMaterial;
+import static org.lwjgl.opengl.GL11.glNormal3f;
+import static org.lwjgl.opengl.GL11.glPointSize;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+import static org.lwjgl.opengl.GL11.glVertex3f;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -12,6 +47,9 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.ARBVertexBufferObject;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import com.bulletphysics.collision.shapes.BvhTriangleMeshShape;
 import com.bulletphysics.collision.shapes.CollisionShape;
@@ -59,7 +97,7 @@ public class Mesh extends SceneNode {
 	
 	private static final long serialVersionUID = 3406084382045144472L;
 
-	public static final boolean enableVBO = false; 
+	public static final boolean enableVBO = true; 
 	
 	public static final int DRAW_SOLID = 0;
 	public static final int DRAW_SMOOTH = 1;
@@ -75,6 +113,12 @@ public class Mesh extends SceneNode {
 	private int colourBufferID; 
 	private int indexBufferID;
 	private int normalBufferID;
+	
+	private FloatBuffer vertexBuffer;
+	private IntBuffer indexBuffer;
+	private FloatBuffer textureBuffer;
+	private FloatBuffer normalBuffer;
+	private FloatBuffer colorBuffer;
 	
 	private boolean shadow = false;
 	
@@ -167,59 +211,82 @@ public class Mesh extends SceneNode {
 		colourBufferID = VBOUtils.createVBOID();
 		indexBufferID  = VBOUtils.createVBOID(); 
 		
-		FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.size()*3);
+		int numFaces = 0;
+		int numVerts = 0;
+		int numUvCo = 0;
+		int numIdx  = 0;
 		
-		for (Vertex vertex : vertices) {
-			vertexBuffer.put(vertex.x).put(vertex.y).put(vertex.z);			
+		for (String key : materials.keySet()) {
+			
+			Material material = materials.get(key);
+			
+			for (Face face : material.getFaces()) {
+				
+				numFaces += material.getFaces().size();
+				
+				for (int j = 0; j < face.getVertexIndices().size(); j++) {
+					numUvCo += 2;
+					numVerts += face.getVertexIndices().size();
+					
+				}
+				
+				numIdx += face.getVertexIndices().size();
+			}
+
+			
 		}
 		
-		vertexBuffer.flip();
-		
-		FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(uvCoordinates.size()*2);
+		vertexBuffer = BufferUtils.createFloatBuffer(numVerts*3);;		
+		textureBuffer = BufferUtils.createFloatBuffer(numUvCo);
+		normalBuffer = BufferUtils.createFloatBuffer(numVerts *3);
+		colorBuffer = BufferUtils.createFloatBuffer(numVerts*3);
+		indexBuffer = BufferUtils.createIntBuffer(numIdx);
+	
+		int i = 0;
+		for (String key : materials.keySet()) {
+			
+			Material material = materials.get(key);
+			
+			
+			for (Face face : material.getFaces()) {
+				
+				for (int j = 0; j < face.getVertexIndices().size(); j++) {
+					
 
-		for (Vector2f coord : uvCoordinates) {
-			textureBuffer.put(coord.x).put(coord.y);		
+					if (material.isTextured() && material.getTexture() != null) {
+						Integer index = face.getUvVertexIndices().get(j);
+
+						textureBuffer.put((float)getUVCoordinates().get(index-1).x).put((float)getUVCoordinates().get(index-1).y);		
+						
+					}
+					
+					float x = getVertices().get(face.getVertexIndices().get(j)).getX();
+					float y = getVertices().get(face.getVertexIndices().get(j)).getY();
+					float z = getVertices().get(face.getVertexIndices().get(j)).getZ();
+
+						
+					float nx = getVertices().get(face.getVertexIndices().get(j)).getNormal().getX();
+					float ny = getVertices().get(face.getVertexIndices().get(j)).getNormal().getY();
+					float nz = getVertices().get(face.getVertexIndices().get(j)).getNormal().getZ();
+						
+					normalBuffer.put(nx).put(ny).put(nz);
+					vertexBuffer.put(x).put(y).put(z);
+					colorBuffer.put(1.0f).put(1.0f).put(1.0f);
+				}
+				indexBuffer.put(i++);
+				indexBuffer.put(i++);
+				indexBuffer.put(i++);
+			}
+
+			
 		}
 
 		textureBuffer.flip();
-		
-		FloatBuffer normalBuffer = BufferUtils.createFloatBuffer(vertices.size()*3);
-		
-		for (Vertex vertex : vertices) {
-			normalBuffer.put(vertex.getNormal().x).put(vertex.getNormal().y).put(vertex.getNormal().z);
-		}
 		normalBuffer.flip();
-		
-		FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(vertices.size()*3);
-		
-		for (Vertex vertex : vertices) {
-			colorBuffer.put(1.0f).put(1.0f).put(1.0f);
-		}
-		
+		vertexBuffer.flip();
 		colorBuffer.flip();
-
-		IntBuffer indexBuffer = BufferUtils.createIntBuffer(numFaces*3);
-		
-		for (String key : materials.keySet()) {
-
-			Material mat = materials.get(key);
-
-			for (Face f : mat.getFaces()) {
-				for (Integer index : f.getVertexIndices()) {
-					indexBuffer.put(index);
-				}
-				
-			}
-		}
-		
 		indexBuffer.flip();
-		
-		VBOUtils.bufferData(vertexBufferID, vertexBuffer);
-		VBOUtils.bufferData(normalBufferID, normalBuffer);
-		VBOUtils.bufferData(textureBufferID, textureBuffer);
-		VBOUtils.bufferData(colourBufferID, colorBuffer);
-		VBOUtils.bufferElementData(indexBufferID, indexBuffer);
-		
+
 	}	
 
 	/**
@@ -229,6 +296,7 @@ public class Mesh extends SceneNode {
 	public void draw() {
 
 		if (enableVBO) {
+			
 			drawVBO();
 		}
 		else {
@@ -242,27 +310,69 @@ public class Mesh extends SceneNode {
 		if (useShader) {
 			enableShader();
 		}
-
+		
 		if (location != null)
 			glTranslatef(location.getX(), location.getY(), location.getZ());
 
+		glRotatef(axisAngleRotation.angle, axisAngleRotation.x, axisAngleRotation.y, axisAngleRotation.z);
+		
 		glRotatef(xrot, 1.0f, 0.0f, 0.0f);
 		glRotatef(yrot, 0.0f, 1.0f, 0.0f);
 		glRotatef(zrot, 0.0f, 0.0f, 1.0f);
-
-		if (!isTextured()) {
-			glDisable(GL_TEXTURE_2D);			
-		}
-		else {
-			if (textureLocation != null) {
-				glEnable(GL_TEXTURE_2D);
-				TextureManager.getInstance().getTexture(textureLocation).bind();				
-			}
-		}
-
-		VBOUtils.render(GL_TRIANGLES,vertexBufferID, textureBufferID, normalBufferID, colourBufferID, indexBufferID, numFaces*3,numFaces*3);
 		
-		glDisable(GL_TEXTURE_2D);	
+		
+		setMaterials();
+
+		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
+		VBOUtils.bufferData(vertexBufferID, vertexBuffer);
+		GL11.glVertexPointer(3, GL11.GL_FLOAT, 12, 0);
+		GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		VBOUtils.bufferData(textureBufferID,textureBuffer);
+		GL11.glTexCoordPointer(2, GL11.GL_FLOAT, 0, 0);		
+
+		GL11.glEnableClientState(GL11.GL_NORMAL_ARRAY);
+		VBOUtils.bufferData(normalBufferID, normalBuffer);
+		GL11.glNormalPointer(GL11.GL_FLOAT, 12,0);
+		
+		GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
+		VBOUtils.bufferData(colourBufferID, colorBuffer);
+		GL11.glColorPointer(3, GL11.GL_FLOAT, 12, 0);
+
+		VBOUtils.bufferElementData(indexBufferID,indexBuffer); 
+		// GL11.glDrawArrays(GL11.GL_QUADS, 0, 24);
+		
+		
+		Material m = null;
+		
+		for (String key : materials.keySet()) {
+			
+			Material material = materials.get(key);
+						
+			// VBOUtils.renderRange(GL_TRIANGLES,vertexBufferID, textureBufferID, normalBufferID, colourBufferID, indexBufferID, start,material.getFaces().size() * 3, numFaces * 3);
+			
+			if (material.isTextured() && material.getTexture() != null) {
+				glEnable(GL_TEXTURE_2D);
+				material.getTexture().bind();
+				m = material;
+				break;
+			}
+
+			
+		}
+		
+		//GL11.glDrawElements(GL11.GL_TRIANGLES, indexBuffer);
+		GL12.glDrawRangeElements(GL_TRIANGLES, 0, numFaces * 3, numFaces * 3, GL11.GL_UNSIGNED_INT, 0);
+		
+		if (m.isTextured() && m.getTexture() != null) {
+			glDisable(GL_TEXTURE_2D);
+		}
+		
+		// VBOUtils.render(GÃ§ numFaces*3,numFaces*3);
+		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
+		GL11.glDisableClientState(GL11.GL_NORMAL_ARRAY);
+		GL11.glDisableClientState(GL11.GL_TEXTURE_COORD_ARRAY);
+		GL11.glDisableClientState(GL11.GL_VERTEX_ARRAY);
+		
 		
 		// disable shader program if used
 		if (useShader) {
@@ -672,9 +782,9 @@ public class Mesh extends SceneNode {
 		float extrude = 10000000000000000.0f;
 
 		/**
-		 * Once the set of an object’s silhouette edges has been determined with
+		 * Once the set of an objectï¿½s silhouette edges has been determined with
 		 * respect to a light source, we must extrude each edge away from the
-		 * light’s position to form the object’s shadow volume.
+		 * lightï¿½s position to form the objectï¿½s shadow volume.
 		 * 
 		 * For a point light source, the extrusion of the silhouette edges
 		 * consists of a set of quads, each of which has the two unmodified
@@ -720,7 +830,7 @@ public class Mesh extends SceneNode {
 	    	
 			/**
 			 * We need to make sure that the vertices of each extrusion
-			 * primitive are wound so that the face’s normal direction points
+			 * primitive are wound so that the faceï¿½s normal direction points
 			 * out of the shadow volume. Suppose that a silhouette edge E has
 			 * endpoints A and B. The edge-finding code presented in Listing 1
 			 * associates the triangle for which the vertices A and B occur in

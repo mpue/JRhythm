@@ -148,7 +148,7 @@ public class VehicleScene extends AbstractScene {
 
 		drawChildren(sceneNode);
 		drawChildren(rootNode);
-
+		
 		for (Light light : lights) {
 			calculateChildrenShadowSilhouette(rootNode, light);
 			renderShadow(rootNode, light);
@@ -319,11 +319,11 @@ public class VehicleScene extends AbstractScene {
 
 		for (Mesh wheel : wheels) {
 			wheel.setShadow(true);
-			// wheel.attachShader("shaders/simpleTexture");
+			//wheel.attachShader("shaders/shadowMap");
 		}
 		
 		map = addMesh(rootNode, "objects/testmap.obj", new Vector3f(0,-4.5f,0));
-		// map.attachShader("shaders/simpleTexture");
+		// map.attachShader("shaders/cloud");
 		
 		setBackgroundColor(new Vector4f(0.8f,0.8f,1.0f,1.0f));
 		showGrid = false;
