@@ -278,6 +278,7 @@ public class VehicleScene extends AbstractScene {
 
 	@Override
 	public void init() {
+	
 
 		Camera camera1 = new Camera("cam1");
 		camera1.update(0, 0);
@@ -319,11 +320,11 @@ public class VehicleScene extends AbstractScene {
 
 		for (Mesh wheel : wheels) {
 			wheel.setShadow(true);
-			//wheel.attachShader("shaders/shadowMap");
+			wheel.attachShader("shaders/simpleTexture");
 		}
 		
 		map = addMesh(rootNode, "objects/testmap.obj", new Vector3f(0,-4.5f,0));
-		// map.attachShader("shaders/cloud");
+		map.attachShader("shaders/simpleTexture");
 		
 		setBackgroundColor(new Vector4f(0.8f,0.8f,1.0f,1.0f));
 		showGrid = false;

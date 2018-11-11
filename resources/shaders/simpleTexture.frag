@@ -11,7 +11,7 @@ void main()
 	cf = intensity * (gl_FrontMaterial.diffuse).rgb + gl_FrontMaterial.ambient.rgb;
 	af = gl_FrontMaterial.diffuse.a;
 	texel = texture2D(tex,gl_TexCoord[0].st);
-	ct = texel.rgb/4;
+	ct = texel.rgb * .4;
 	at = texel.a;
 	gl_FragColor = vec4(ct * cf, at * af);
 

@@ -1,6 +1,10 @@
 package de.pueski.jrhythm.core;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glViewport;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -27,6 +31,8 @@ import de.pueski.jrhythm.objects.SceneNode;
 import de.pueski.jrhythm.objects.Sector;
 import de.pueski.jrhythm.scene.AbstractScene;
 import de.pueski.jrhythm.scene.AnotherScene;
+import de.pueski.jrhythm.scene.DefaultScene;
+import de.pueski.jrhythm.scene.Filter2dScene;
 import de.pueski.jrhythm.scene.PhysicsScene;
 import de.pueski.jrhythm.scene.RenderDepthBufferScene;
 import de.pueski.jrhythm.scene.RenderToTextureScene;
@@ -146,10 +152,13 @@ public class Game {
 
 		setupFog();
 		hud = new HUD(displayMode.getWidth(), displayMode.getHeight());
-		
+		sceneManager.addScene(new DefaultScene("DefaultScene"));
 		sceneManager.addScene(new VehicleScene("vehicleScene"));
+		sceneManager.addScene(new AnotherScene("AnotherScene"));
+		sceneManager.addScene(new Filter2dScene("Filter2dScene"));
 		
-		// sceneManager.addScene(new DefaultScene("DefaultScene"));
+
+		
 		
 		// sceneManager.addScene(new RenderToTextureScene("RenderToTexture"));
 		
@@ -166,12 +175,10 @@ public class Game {
 					e.printStackTrace();
 				}
 
-				// sceneManager.addScene(new VehicleScene("VehicleScene"));
+
 				
-				sceneManager.addScene(new PhysicsScene());
 				sceneManager.addScene(new AnotherScene("AnotherScene"));
-				sceneManager.addScene(new RenderDepthBufferScene("DepthBuffer"));
-				sceneManager.addScene(new RenderToTextureScene("RenderToTexture"));
+				
 				clearMessage();
 
 			}

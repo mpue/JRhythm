@@ -47,7 +47,6 @@ import java.util.Vector;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBVertexBufferObject;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -67,7 +66,6 @@ import de.pueski.jrhythm.math.MathUtil;
 import de.pueski.jrhythm.math.Vector2f;
 import de.pueski.jrhythm.math.Vector3f;
 import de.pueski.jrhythm.math.Vector4f;
-import de.pueski.jrhythm.texture.TextureManager;
 import de.pueski.jrhythm.util.VBOUtils;
 /**
  * <p>

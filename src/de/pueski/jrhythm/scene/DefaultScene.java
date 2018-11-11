@@ -53,6 +53,8 @@ public class DefaultScene extends AbstractScene {
 	@Override
 	public void render() {
 		
+		super.render();
+		
 		drawChildren(sceneNode);
 		drawChildren(rootNode);
 

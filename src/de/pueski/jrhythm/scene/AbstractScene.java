@@ -25,6 +25,7 @@ import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import com.bulletphysics.linearmath.Clock;
 
@@ -607,9 +608,10 @@ public abstract class AbstractScene {
 		int fragmentShaderID = ARBShaderObjects.glCreateShaderObjectARB(
 		ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
 		ARBShaderObjects.glShaderSourceARB(vertexShaderID, vertexShader);
-		ARBShaderObjects.glCompileShaderARB(vertexShaderID);		 
+		ARBShaderObjects.glCompileShaderARB(vertexShaderID);	
 		ARBShaderObjects.glShaderSourceARB(fragmentShaderID, fragmentShader);
 		ARBShaderObjects.glCompileShaderARB(fragmentShaderID);		
+		System.out.println(GL20.glGetShaderInfoLog(fragmentShaderID, 1024));
 		shaderProgramID = ARBShaderObjects.glCreateProgramObjectARB();
 		ARBShaderObjects.glAttachObjectARB(shaderProgramID, vertexShaderID);
 		ARBShaderObjects.glAttachObjectARB(shaderProgramID, fragmentShaderID);

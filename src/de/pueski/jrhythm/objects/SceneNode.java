@@ -23,6 +23,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
 
 import de.pueski.jrhythm.core.GLDrawable;
 import de.pueski.jrhythm.core.Light;
@@ -92,11 +94,11 @@ public abstract class SceneNode implements Serializable, Comparable<SceneNode>, 
 	public float zrot = 0.0f;
 	
 	@XmlTransient
-	private int shaderProgramID;
+	private int shaderProgramID = -1;
 	private String shaderProgramName;
 	
 	@XmlTransient
-	protected boolean useShader = false;
+	protected boolean useShader = true;
 	protected boolean textured = false;
 	
 	protected String textureLocation = null;
@@ -413,22 +415,29 @@ public abstract class SceneNode implements Serializable, Comparable<SceneNode>, 
 
 	public void attachShader(String name) {
 		try {
+			log.info("Using GLSL shader program "+name+".");
 			final ByteBuffer vertexShader = loadShader(name+".vert");
 			final ByteBuffer fragmentShader = loadShader(name+".frag");
 			prepareShader(vertexShader, fragmentShader);
 		} 
 		catch (Exception e) {
+			e.printStackTrace();
 			log.error("Failed loading GLSL shader program "+name+".");
 		}
 		useShader = true;
 	}
 	
 	public void enableShader() {
-		ARBShaderObjects.glUseProgramObjectARB(shaderProgramID);		
+		if (shaderProgramID > 0) {
+			ARBShaderObjects.glUseProgramObjectARB(shaderProgramID);					
+		
+		}
 	}
 	
 	public void disableShader() {
-		ARBShaderObjects.glUseProgramObjectARB(0);
+		if (shaderProgramID > 0) {
+			ARBShaderObjects.glUseProgramObjectARB(0);
+		}	
 	}
 	
 	/**
@@ -468,6 +477,7 @@ public abstract class SceneNode implements Serializable, Comparable<SceneNode>, 
 		ARBShaderObjects.glCompileShaderARB(vertexShaderID);		 
 		ARBShaderObjects.glShaderSourceARB(fragmentShaderID, fragmentShader);
 		ARBShaderObjects.glCompileShaderARB(fragmentShaderID);		
+		System.out.println(GL20.glGetShaderInfoLog(fragmentShaderID, 1024));
 		shaderProgramID = ARBShaderObjects.glCreateProgramObjectARB();
 		ARBShaderObjects.glAttachObjectARB(shaderProgramID, vertexShaderID);
 		ARBShaderObjects.glAttachObjectARB(shaderProgramID, fragmentShaderID);

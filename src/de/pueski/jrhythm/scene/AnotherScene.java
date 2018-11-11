@@ -46,6 +46,8 @@ public class AnotherScene extends AbstractScene {
 	@Override
 	public void render() {
 		
+		super.render();
+		
 		drawChildren(sceneNode);
 		drawChildren(rootNode);
 		
@@ -111,14 +113,18 @@ public class AnotherScene extends AbstractScene {
 //			}
 //			
 //		}
-		
 		Mesh mesh;
 		
-		mesh = addMesh(rootNode,"objects/cube.obj" , new Vector3f(0, 1, 0));
+		mesh = addMesh(rootNode,"objects/hypercube.obj" , new Vector3f(0, 1, 0));
 		mesh.setShadow(true);
 		mesh.attachShader("shaders/simpleTexture");
+		
+		/*
 		mesh = addMesh(rootNode,"objects/hypercube.obj" , new Vector3f(-8.0f, 1, -8.0f));
 		mesh.setShadow(true);
+		
+	
+		
 		mesh.attachShader("shaders/simpleTexture");
 		mesh = addMesh(rootNode,"objects/simplechair.obj" , new Vector3f(8.0f, 0, 11.0f));
 		mesh.setShadow(true);
@@ -161,6 +167,7 @@ public class AnotherScene extends AbstractScene {
 
 		mesh = addMesh(rootNode,"objects/bottom.obj" , new Vector3f(0, 10, 0));
 		mesh.attachShader("shaders/simpleTexture");
+		*/
 	}
 	
 	public void genLists() {
