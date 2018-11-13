@@ -18,6 +18,8 @@ import static org.lwjgl.opengl.GL11.GL_SHININESS;
 import static org.lwjgl.opengl.GL11.GL_SPECULAR;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_BIT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MAG_FILTER;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_MIN_FILTER;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glBegin;
 import static org.lwjgl.opengl.GL11.glColor3f;
@@ -34,6 +36,7 @@ import static org.lwjgl.opengl.GL11.glPopAttrib;
 import static org.lwjgl.opengl.GL11.glPushAttrib;
 import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glTexParameteri;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import static org.lwjgl.opengl.GL11.glVertex3f;
 
@@ -318,7 +321,6 @@ public class Mesh extends SceneNode {
 		glRotatef(yrot, 0.0f, 1.0f, 0.0f);
 		glRotatef(zrot, 0.0f, 0.0f, 1.0f);
 		
-		
 		setMaterials();
 
 		GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
@@ -351,6 +353,8 @@ public class Mesh extends SceneNode {
 			if (material.isTextured() && material.getTexture() != null) {
 				glEnable(GL_TEXTURE_2D);
 				material.getTexture().bind();
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
 				m = material;
 				break;
 			}

@@ -1,9 +1,13 @@
 package de.pueski.jrhythm.core;
 
 import java.awt.EventQueue;
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -58,7 +62,25 @@ public class Interpreter {
 					String name = tokens[1];				
 					AbstractScene scene = SceneManager.getInstance().getCurrentScene();				
 					scene.removeMesh(scene.getRootNode(), name);
-				}				
+				}		
+				else if (tokens[0].startsWith("load")) {
+					String name = tokens[1];				
+							
+					URL url = Thread.currentThread().getContextClassLoader().getResource("scenes/"+name+".sce");
+					
+					if (url == null)
+						throw new IllegalArgumentException("Cannot find resource "+name);
+					
+					File file = new File(url.getFile());
+					
+					@SuppressWarnings("unchecked")
+					List<String> lines = FileUtils.readLines(file);
+					
+					for(String line : lines) {
+						handleCommand(line);
+					}
+					
+				}		
 				
 			}
 			else if (tokens.length == 4) {
