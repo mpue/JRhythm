@@ -33,9 +33,6 @@ import de.pueski.jrhythm.scene.AbstractScene;
 import de.pueski.jrhythm.scene.AnotherScene;
 import de.pueski.jrhythm.scene.DefaultScene;
 import de.pueski.jrhythm.scene.Filter2dScene;
-import de.pueski.jrhythm.scene.PhysicsScene;
-import de.pueski.jrhythm.scene.RenderDepthBufferScene;
-import de.pueski.jrhythm.scene.RenderToTextureScene;
 import de.pueski.jrhythm.scene.SceneManager;
 import de.pueski.jrhythm.scene.VehicleScene;
 import de.pueski.jrhythm.sound.MusicPlayer;
@@ -152,6 +149,7 @@ public class Game {
 
 		setupFog();
 		hud = new HUD(displayMode.getWidth(), displayMode.getHeight());
+		
 		sceneManager.addScene(new DefaultScene("DefaultScene"));
 		sceneManager.addScene(new VehicleScene("vehicleScene"));
 		sceneManager.addScene(new AnotherScene("AnotherScene"));
@@ -194,38 +192,35 @@ public class Game {
 		// e.printStackTrace();
 		// }
 
-		// try {
-		// JAXBContext jaxbContext =
-		// JAXBContext.newInstance(DefaultScene.class);
-		// jaxbContext.generateSchema(new SchemaOutputResolver() {
-		//
-		// @Override
-		// public Result createOutput(String namespaceUri, String
-		// suggestedFileName) throws IOException {
-		// File file = new File(suggestedFileName);
-		// StreamResult result = new StreamResult(file);
-		// System.out.println(file.getAbsolutePath());
-		// result.setSystemId(file.toURI().toURL().toString());
-		// return result;
-		//
-		// }
-		// });
-		// }
-		// catch (Exception e) {
-		// e.printStackTrace();
-		// }
+		/*
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(DefaultScene.class);
+			jaxbContext.generateSchema(new SchemaOutputResolver() {
 
-		// try {
-		// Unmarshaller u =
-		// JAXBContext.newInstance(DefaultScene.class).createUnmarshaller();
-		// DefaultScene s = (DefaultScene) u.unmarshal(new FileInputStream(new
-		// File("C:\\devel\\indigo_workspace\\JRhythm\\resources\\scene1.xml")));
-		// postInitLight(s.getRootNode());
-		// sceneManager.addScene(s);
-		// }
-		// catch (Exception e) {
-		// e.printStackTrace();
-		// }
+				@Override
+				public Result createOutput(String namespaceUri, String suggestedFileName) throws IOException {
+					File file = new File(suggestedFileName);
+					StreamResult result = new StreamResult(file);
+					System.out.println(file.getAbsolutePath());
+					result.setSystemId(file.toURI().toURL().toString());
+					return result;
+
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		*/
+		/*
+		try {
+			Unmarshaller u = JAXBContext.newInstance(DefaultScene.class).createUnmarshaller();
+			DefaultScene s = (DefaultScene) u.unmarshal(Thread.currentThread().getContextClassLoader().getResourceAsStream("scene1.xml"));
+			postInitLight(s.getRootNode());
+			sceneManager.addScene(s);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		*/
 
 	}
 

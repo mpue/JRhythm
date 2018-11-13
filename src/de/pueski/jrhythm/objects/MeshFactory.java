@@ -129,7 +129,7 @@ public class MeshFactory {
 				}
 				if (tokens[0].equals("usemtl")) {
 					currentMaterial = materials.get(tokens[1]);
-					log.debug("Assigning material "+currentMaterial.getName()+" to mesh "+mesh.getName());
+					// log.debug("Assigning material "+currentMaterial.getName()+" to mesh "+mesh.getName());
 					mesh.getMaterials().put(tokens[1], currentMaterial);
 				}
 				
@@ -170,8 +170,13 @@ public class MeshFactory {
 					if (tokens[1].contains("/")) {
 						for (int i = 1; i < tokens.length; i++) {
 							String[] subTokens = tokens[i].split("/");
-							f.getVertexIndices().add(new Integer(subTokens[0]) - 1);
-							f.getUvVertexIndices().add(new Integer(subTokens[1]));								
+							try {
+								f.getVertexIndices().add(new Integer(subTokens[0]) - 1);							
+								f.getUvVertexIndices().add(new Integer(subTokens[1]));
+							}
+							catch (NumberFormatException nfe) {
+								continue;
+							}
 						}
 					}
 					else {
@@ -183,34 +188,12 @@ public class MeshFactory {
 					
 					Vector<Vertex> vertices = mesh.getVertices();
 					
-					// calculate the corresponding vector from the vertices of the face
+					normalizeFace(f, vertices);
 					
-					// first vector
-					
-					float x = vertices.get(f.getVertexIndices().get(1)).getX()
-							- vertices.get(f.getVertexIndices().get(0)).getX();
-					
-					float y = vertices.get(f.getVertexIndices().get(1)).getY()
-							- vertices.get(f.getVertexIndices().get(0)).getY();
-					
-					float z = vertices.get(f.getVertexIndices().get(1)).getZ()
-							- vertices.get(f.getVertexIndices().get(0)).getZ();
-					
-					Vector3f v1 = new Vector3f(x, y, z);
-					
-					// second vector
-					
-					x = vertices.get(f.getVertexIndices().get(2)).getX() - vertices.get(f.getVertexIndices().get(0)).getX();						
-					y = vertices.get(f.getVertexIndices().get(2)).getY() - vertices.get(f.getVertexIndices().get(0)).getY();
-					z = vertices.get(f.getVertexIndices().get(2)).getZ() - vertices.get(f.getVertexIndices().get(0)).getZ();
-					
-					Vector3f v2 = new Vector3f(x, y, z);
-					
-					// calculate the perpendicular vector, normalize it and add it to the face
-					
-					f.setNormal(Vector3f.cross(v1, v2, null));
-					currentMaterial.getFaces().add(f);
-					mesh.numFaces++;
+					if (currentMaterial != null) {
+						currentMaterial.getFaces().add(f);
+						mesh.numFaces++;
+					}
 					
 				}
 				if (tokens[0].equals("s")) {
@@ -223,9 +206,9 @@ public class MeshFactory {
 			in.close();			
 			
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
-			return null;
+	
 		}
 		
 		for (SceneNode n : meshes) {
@@ -243,6 +226,42 @@ public class MeshFactory {
 		
 		
 		
+	}
+
+	private void normalizeFace(Face f, Vector<Vertex> vertices) {
+		// calculate the corresponding vector from the vertices of the face
+		
+		// first vector
+		
+		float x = vertices.get(f.getVertexIndices().get(1)).getX()
+				- vertices.get(f.getVertexIndices().get(0)).getX();
+		
+		float y = vertices.get(f.getVertexIndices().get(1)).getY()
+				- vertices.get(f.getVertexIndices().get(0)).getY();
+		
+		float z = vertices.get(f.getVertexIndices().get(1)).getZ()
+				- vertices.get(f.getVertexIndices().get(0)).getZ();
+		
+		Vector3f v1 = new Vector3f(x, y, z);
+		
+		// second vector
+		
+		Vertex vertexB = vertices.get(f.getVertexIndices().get(0));
+		
+		if (f.getVertexIndices().size() > 2 && vertices.size() > f.getVertexIndices().get(2)) {
+			
+			Vertex vertexA = vertices.get(f.getVertexIndices().get(2));
+			
+			x = vertexA.getX() - vertexB.getX();						
+			y = vertexA.getY() - vertexB.getY();	
+			z = vertexA.getZ() - vertexB.getZ();	
+			
+			Vector3f v2 = new Vector3f(x, y, z);
+			
+			// calculate the perpendicular vector, normalize it and add it to the face
+			
+			f.setNormal(Vector3f.cross(v1, v2, null));
+		}
 	}
 	
 	/**

@@ -58,7 +58,7 @@ import de.pueski.jrhythm.test.GLShadowOnPlane;
  * @author Matthias Pueski
  */
 
-@XmlType(propOrder = {"name","children","location","xrot","yrot","zrot","shaderProgramName","textureLocation","textured"}, name="SceneNode")
+@XmlType(propOrder = {"name","children","location","xrot","yrot","zrot","shaderProgramName","textureLocation","textured", "dropShadow"}, name="SceneNode")
 @XmlSeeAlso({Box.class,Plane.class,Light.class})
 @XmlAccessorType(XmlAccessType.FIELD)
 public abstract class SceneNode implements Serializable, Comparable<SceneNode>, GLDrawable {

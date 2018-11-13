@@ -138,6 +138,15 @@ public class TextureLoader {
  
         BufferedImage bufferedImage = loadImage(resourceName);
         
+        // no image found, try another location
+        if (bufferedImage == null) {
+        		bufferedImage = loadImage("textures/"+resourceName);
+        }
+        // still not available
+        if (bufferedImage == null) {
+        		throw new IOException("Coud not access texture "+ resourceName); 
+        }
+        
         texture.setWidth(bufferedImage.getWidth());
         texture.setHeight(bufferedImage.getHeight());
         

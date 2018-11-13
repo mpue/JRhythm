@@ -91,7 +91,7 @@ public class KeyboardMap extends HashMap<Integer, Character> {
 //		put( Keyboard.KEY_NUMPAD3         ,''); // 0x51;
 //		put( Keyboard.KEY_NUMPAD0         ,''); // 0x52;
 //		put( Keyboard.KEY_DECIMAL         ,''); // 0x53; /* . on numeric keypad */
-		put( Keyboard.KEY_F11             ,Character.valueOf((char)0x57)); // 0x57;
+//		put( Keyboard.KEY_F11             ,Character.valueOf((char)0x57)); // 0x57;
 //		put( Keyboard.KEY_F12             ,''); // 0x58;
 //		put( Keyboard.KEY_F13             ,''); // 0x64; /*                     (NEC PC98) */
 //		put( Keyboard.KEY_F14             ,''); // 0x65; /*                     (NEC PC98) */

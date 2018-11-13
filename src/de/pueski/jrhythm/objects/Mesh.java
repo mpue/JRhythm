@@ -95,7 +95,7 @@ public class Mesh extends SceneNode {
 	
 	private static final long serialVersionUID = 3406084382045144472L;
 
-	public static final boolean enableVBO = true; 
+	public static final boolean enableVBO = false; 
 	
 	public static final int DRAW_SOLID = 0;
 	public static final int DRAW_SMOOTH = 1;
