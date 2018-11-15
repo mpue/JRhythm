@@ -1,10 +1,9 @@
 package de.pueski.jrhythm.core;
 
-import java.awt.EventQueue;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
@@ -21,7 +20,9 @@ public class Interpreter {
 	private static final Log log = LogFactory.getLog(Interpreter.class);
 	
 	private static final Interpreter instance = new Interpreter();
-
+	private final ArrayList<String> history = new ArrayList<String>(); 
+	private int currentCommandIndex = 0;
+	
 	/**
 	 * @return the instance
 	 */
@@ -34,6 +35,9 @@ public class Interpreter {
 	}
 	
 	public void handleCommand(String command) {
+		
+		history.add(command);
+		currentCommandIndex = history.size() - 1;
 		
 		try {
 			String[] tokens = command.split(" ");
@@ -76,10 +80,14 @@ public class Interpreter {
 					@SuppressWarnings("unchecked")
 					List<String> lines = FileUtils.readLines(file);
 					
-					for(String line : lines) {
-						handleCommand(line);
+					for(String line : lines)  {
+						if (!line.startsWith("#")) {
+							handleCommand(line);
+							
+						}
 					}
 					
+					history.clear();
 				}		
 				
 			}
@@ -170,6 +178,30 @@ public class Interpreter {
 		
 		
 		
+	}
+	
+	public String getPreviousCommand() {
+		
+		if (currentCommandIndex > 0) {
+			currentCommandIndex--;
+		}
+		else {
+			currentCommandIndex = history.size() - 1;
+		}
+		
+		return history.get(currentCommandIndex);
+	}
+	
+	public String getNextCommand() {
+		
+		if (currentCommandIndex < history.size() - 2) {
+			currentCommandIndex++;
+		}
+		else {
+			currentCommandIndex = 0;
+		}
+		
+		return history.get(currentCommandIndex);
 	}
 	
 }

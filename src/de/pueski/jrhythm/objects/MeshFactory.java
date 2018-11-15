@@ -3,7 +3,6 @@ package de.pueski.jrhythm.objects;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,8 +17,8 @@ import de.pueski.jrhythm.math.Vector4f;
 import de.pueski.jrhythm.texture.TextureManager;
 
 /**
- * The {@link MeshFactory} is used to create {@link Mesh} obejcts from 
- * a Wavefront object file (.obj). It also performs basic mesh precalulations,
+ * The {@link MeshFactory} is used to create {@link Mesh} objects from 
+ * a Wavefront object file (.obj). It also performs basic mesh precalculations,
  * like vertex normals, edge lists and face-plane calculations.
  * 
  * @author Matthias Pueski (16.05.2011)

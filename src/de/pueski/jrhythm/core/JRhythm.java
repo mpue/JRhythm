@@ -167,10 +167,10 @@ public class JRhythm {
 		glViewport(0, 0, mode.getWidth(), mode.getHeight());
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		GLU.gluPerspective(45.0f, ((float) mode.getWidth() / (float) mode.getHeight()), 0.1f, 1000.0f);
+		GLU.gluPerspective(8.0f, ((float) mode.getWidth() / (float) mode.getHeight()), 0.1f, 1000.0f);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glShadeModel(GL_SMOOTH);
+		// glShadeModel(GL_SMOOTH);
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClearDepth(1.0f);
 		glEnable(GL_DEPTH_TEST);		

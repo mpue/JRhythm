@@ -292,11 +292,23 @@ public class Game {
 				if (!enterKeyPressed) {
 					String command = Console.getInstance().getBuffer().toString();
 					Interpreter.getInstance().handleCommand(command);
-					Console.getInstance().clear();
 					enterKeyPressed = true;
+					Console.getInstance().clear();
+					if (command.startsWith("load")) {
+						consoleInput = false;
+					}
 				}
 
 			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+				Console.getInstance().clear();
+				Console.getInstance().getBuffer().append(Interpreter.getInstance().getPreviousCommand());
+			}
+			else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+				Console.getInstance().clear();
+				Console.getInstance().getBuffer().append(Interpreter.getInstance().getNextCommand());
+			}
+			
 			else {
 				enterKeyPressed = false;
 			}
